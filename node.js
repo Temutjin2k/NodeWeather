@@ -1,9 +1,7 @@
 require('dotenv').config()
 const express = require('express');
 const axios = require('axios');
-const e = require('express');
 const app = express()
-
 
 const WeatherApi = process.env.WEATHER_API
 
@@ -21,9 +19,11 @@ app.get('/weather', async (req, resp) => {
 
     try{
         const weatherPromise = axios.get(`http://api.weatherapi.com/v1/current.json?key=${WeatherApi}&q=${city}&aqi=no`)
-        
-        const [weatherResponse] = await Promise.all([
-            weatherPromise
+        const dogpromise = axios.get('https://dog-api.kinduff.com/api/facts')
+
+        const [weatherResponse, dogResponse, footballResponse] = await Promise.all([
+            weatherPromise,
+            dogpromise
         ]);
 
         const weatherData = {
@@ -41,15 +41,39 @@ app.get('/weather', async (req, resp) => {
             countryCode: weatherResponse.data.location.country,
             rainVolumeLast3Hours: weatherResponse.data.current.precip_mm
         };
-        resp.json(weatherData)
+
+
+        const response = {
+            weather: weatherData,
+            dog: dogResponse.data.facts,
+        }
+
+        resp.json(response)
     }catch (error){
         console.log(error)
         resp.json({message: "Something went wrong", error: error})
         resp.status(500)
     }
+});
 
+app.get('/api/football', async(req, resp) =>{
+    // https://v3.football.api-sports.io/leagues?country=england laliga=140
+    const footballPromise = axios.get(' https://v3.football.api-sports.io/standings?league=140&season=2023', {
+            headers: {
+                'x-rapidapi-key': process.env.FOOTBALL_KEY,
+                'x-rapidapi-host': 'v3.football.api-sports.io'
+            }
+    });
+
+    const [football] = await Promise.all([
+        footballPromise
+    ])
+
+    resp.json(football.data)
 })
 
-app.listen("8080", () =>{
-    console.log("ListenAndServe: http://localhost:8080/")
+app.listen("3000", () =>{
+    console.log("ListenAndServe: http://localhost:3000/")
 })
+
+

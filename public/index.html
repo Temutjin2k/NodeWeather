@@ -19,6 +19,13 @@
 
         <div id="map"></div>
     </div>
+    <div class="container cont">
+        <div>
+            <h1>Dog Fact</h1>
+            <div id="dog-fact"></div>
+        </div>
+        <a href="football.html">Football league standing</a>
+    </div>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe8SDj2pLE_DJbO-HyMpI1LOPF4tlkqEs&callback=initMap"
         async defer></script>
@@ -34,6 +41,7 @@
 
         async function getWeather() {
             const city = document.getElementById('city').value;
+            const dogFactContainer = document.getElementById('dog-fact');
             const weatherInfoDiv = document.getElementById('weather-info');
             const body = document.querySelector('body');
 
@@ -49,18 +57,18 @@
 
                 if (response.ok) {
                     weatherInfoDiv.innerHTML = `
-                        <img class="icon" src="${data.icon}" alt="Weather icon">
-                        <p><strong>Temperature:</strong> ${data.temperature}°C</p>
-                        <p><strong>Description:</strong> ${data.description}</p>
-                        <p><strong>Feels Like:</strong> ${data.feelsLikeTemperature}°C</p>
-                        <p><strong>Humidity:</strong> ${data.humidity}%</p>
-                        <p><strong>Pressure:</strong> ${data.pressure} mb</p>
-                        <p><strong>Wind Speed:</strong> ${data.windSpeed} kph</p>
-                        <p><strong>Country Code:</strong> ${data.countryCode} </p>
-                        <p><strong>Coordinates:</strong> Lat: ${data.coordinates.lat}, Lon: ${data.coordinates.lon}</p> 
+                        <img class="icon" src="${data.weather.icon}" alt="Weather icon">
+                        <p><strong>Temperature:</strong> ${data.weather.temperature}°C</p>
+                        <p><strong>Description:</strong> ${data.weather.description}</p>
+                        <p><strong>Feels Like:</strong> ${data.weather.feelsLikeTemperature}°C</p>
+                        <p><strong>Humidity:</strong> ${data.weather.humidity}%</p>
+                        <p><strong>Pressure:</strong> ${data.weather.pressure} mb</p>
+                        <p><strong>Wind Speed:</strong> ${data.weather.windSpeed} kph</p>
+                        <p><strong>Country Code:</strong> ${data.weather.countryCode} </p>
+                        <p><strong>Coordinates:</strong> Lat: ${data.weather.coordinates.lat}, Lon: ${data.weather.coordinates.lon}</p> 
                     `;
 
-                    temperature = data.temperature
+                    temperature = data.weather.temperature
                     if (temperature > 20) {
                         body.style.backgroundImage = "url('assets/hot.jpg')";
                     } else if (temperature > 0) {
@@ -69,9 +77,14 @@
                         body.style.backgroundImage = "url('assets/cold.jpg')";
                     }
 
+                    if (data.dog && data.dog.length > 0) {
+                        dogFactContainer.textContent = data.dog[0];
+                    } else {
+                        dogFactContainer.textContent = 'No dog facts available.';
+                    }
 
-                    const lat = data.coordinates.lat;
-                    const lng = data.coordinates.lon;
+                    const lat = data.weather.coordinates.lat;
+                    const lng = data.weather.coordinates.lon;
 
                     map.setCenter({ lat: lat, lng: lng });
                     map.setZoom(10);
