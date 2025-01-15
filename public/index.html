@@ -17,13 +17,21 @@
             <div class="weather-info" id="weather-info"></div>
         </div>
 
-        <div class="Anime-container">
-            <h1>Weather App</h1>
-        </div>
+        <div id="map"></div>
     </div>
 
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe8SDj2pLE_DJbO-HyMpI1LOPF4tlkqEs&callback=initMap"
+        async defer></script>
     <script>
+        let map;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 51.179498, lng: 51.340375 },
+                zoom: 15
+            });
+        }
+
         async function getWeather() {
             const city = document.getElementById('city').value;
             const weatherInfoDiv = document.getElementById('weather-info');
@@ -60,13 +68,22 @@
                     } else {
                         body.style.backgroundImage = "url('assets/cold.jpg')";
                     }
+
+
+                    const lat = data.coordinates.lat;
+                    const lng = data.coordinates.lon;
+
+                    map.setCenter({ lat: lat, lng: lng });
+                    map.setZoom(10);
                 } else {
-                    weatherInfoDiv.innerHTML = `<p style="color: blue;">${data.message || 'Failed to fetch weather data.'}</p>`;
+                    weatherInfoDiv.innerHTML = `<p style="color: red;">${data.message || 'Failed to fetch weather data.'}</p>`;
                 }
             } catch (error) {
                 weatherInfoDiv.innerHTML = `<p style="color: red;">An error occurred: ${error.message}</p>`;
             }
         }
+
+        initMap()
     </script>
 </body>
 
