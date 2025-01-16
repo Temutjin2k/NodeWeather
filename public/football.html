@@ -5,52 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Football League Standings</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f9;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: #ffffff;
-        }
-
-        table,
-        th,
-        td {
-            border: 1px solid #ddd;
-        }
-
-        th,
-        td {
-            padding: 12px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #0073e6;
-            color: white;
-        }
-
-        .team-logo {
-            width: 30px;
-            height: 30px;
-        }
-
-        .league-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .league-header img {
-            width: 50px;
-        }
-    </style>
+    <link rel="stylesheet" href="football.css">
 </head>
 
 <body>
@@ -68,7 +23,6 @@
 
                 const container = document.getElementById('standings');
 
-                // Add league information
                 const leagueHeader = document.createElement('div');
                 leagueHeader.className = 'league-header';
                 leagueHeader.innerHTML = `
@@ -77,7 +31,6 @@
                 `;
                 container.appendChild(leagueHeader);
 
-                // Create standings table
                 const table = document.createElement('table');
                 table.innerHTML = `
                     <thead>
