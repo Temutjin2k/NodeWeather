@@ -13,7 +13,7 @@ app.get('/weather', async (req, resp) => {
 
     if (!city){
         resp.json({error: 'city not provided'})
-         resp.status(400)
+        resp.status(400)
         return
     }
 
@@ -21,7 +21,7 @@ app.get('/weather', async (req, resp) => {
         const weatherPromise = axios.get(`http://api.weatherapi.com/v1/current.json?key=${WeatherApi}&q=${city}&aqi=no`)
         const dogpromise = axios.get('https://dog-api.kinduff.com/api/facts')
 
-        const [weatherResponse, dogResponse, footballResponse] = await Promise.all([
+        const [weatherResponse, dogResponse] = await Promise.all([
             weatherPromise,
             dogpromise
         ]);
